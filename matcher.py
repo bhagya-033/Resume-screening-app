@@ -1,15 +1,27 @@
-from sklearn.feature_extraction.text import TfidfVectorizer
-from sklearn.metrics.pairwise import cosine_similarity
+import math
+import re
+from collections import Counter
+
+def get_cosine(vec1, vec2):
+    intersection = set(vec1.keys()) & set(vec2.keys())
+    numerator = sum([vec1[x] * vec2[x] for x in intersection])
+
+    sum1 = sum([vec1[x]**2 for x in vec1.keys()])
+    sum2 = sum([vec2[x]**2 for x in vec2.keys()])
+    denominator = math.sqrt(sum1) * math.sqrt(sum2)
+
+    if not denominator:
+        return 0.0
+    else:
+        return float(numerator) / denominator
+
+def text_to_vector(text):
+    words = re.compile(r'\w+').findall(text.lower())
+    return Counter(words)
 
 def match_resume(resume_text, job_description):
-    documents = [job_description, resume_text]
-
-    # Create TF-IDF vectors
-    vectorizer = TfidfVectorizer(stop_words='english')
-    tfidf_matrix = vectorizer.fit_transform(documents)
-
-    # Compute cosine similarity (job vs resume)
-    similarity = cosine_similarity(tfidf_matrix[0:1], tfidf_matrix[1:2])
-
-    # Return percentage
-    return round(float(similarity[0][0]) * 100, 2)
+    vector1 = text_to_vector(resume_text)
+    vector2 = text_to_vector(job_description)
+    
+    cosine = get_cosine(vector1, vector2)
+    return round(cosine * 100, 2)
