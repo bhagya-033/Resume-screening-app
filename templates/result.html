@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Screening Result</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="container result-container">
+        <h1>Screening Result</h1>
+        <div class="result-card {{ 'selected' if status == 'Selected' else 'rejected' }}">
+            <h2>Match Percentage: {{ percentage }}%</h2>
+            <h3>Status: {{ status }}</h3>
+        </div>
+        <a href="/" class="back-link">Screen Another Resume</a>
+    </div>
+</body>
+</html>

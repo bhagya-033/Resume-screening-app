@@ -1,10 +1,8 @@
-import PyPDF2
+import fitz
 
 def extract_text_from_pdf(file):
-    reader = PyPDF2.PdfReader(file)
-    text = ''
-    for page in reader.pages:
-        content = page.extract_text()
-        if content:
-            text += content
+    doc = fitz.open(stream=file.read(), filetype="pdf")
+    text = ""
+    for page in doc:
+        text += page.get_text()
     return text
